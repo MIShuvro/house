@@ -1,0 +1,38 @@
+Special symbol
+* = required            # = create
+! = unique              $ = edit
+!* = not required       ^ = delete
+
+User: --->
+
+* name
+* email
+! username
+* password
+* confirm password
+!* profile picture
+* gender
+* location
+!* contact number
+
+Rental post :[post]
+
+//todo keys
+* bookmark []
+* review
+* comment  []
+* like [] && count like
+* dislike [] && count dislike
+
+Rental House post :[post] ^--> user || admin can do anything
+* title $--> user || admin can do anything
+* gallery [atleast one photo] $ ^--> user || admin can do anything
+* price/month $--> user || admin can do anything
+* location   $--> user || admin can do anything
+* description[] $ ^--> user || admin can do anything
+
+ Comment -->
+ author: user
+ *Todo: create , edit, delete || admin can do anything
+ * replies
+
