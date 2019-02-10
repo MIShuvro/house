@@ -1,42 +1,39 @@
 const LocalStrategy = require('passport-local').Strategy,
-passport = require('passport'),
-bcrypt = require('bcryptjs')
-User = require('../models/User')
+  bcrypt = require('bcryptjs'),
+  passport = require('passport'),
+  User = require('../models/User')
 
 passport.serializeUser((user, done) => {
-    done(null, user.id)
+  done(null, user.id)
 })
 
 passport.deserializeUser((id, done) => {
-    User.findById(id, (err, user) => {
-        done(err, user)
-    })
+  User.findById(id, (err, user) => {
+    done(err, user)
+  })
 })
 
 passport.use(
-    new LocalStrategy( async(email, password, done) => {
-        try{
-            const user = await User.findOne({email})
-            if(!user){
-                res.json({message: 'That email is not registered'})
-                return done(null, false)
-               
-            }
+  'local-login',
+  new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
+    try {
+      const user = await User.findOne({ email })
+      if (!user) {
+        return done(null, false, { message: 'No user Found' })
+      }
 
-            // Match Password
-            bcrypt.compare(password, user.password, (err, isMatch) => {
-                if(err) throw err
-                if(isMatch){
-                    return done(null, user )
-                }else{
-                
-                    return done(null, false )
-                }
-            })
-        }catch(err){
-            done(err)
+      // Match Password
+      bcrypt.compare(password, user.password, (err, isMatch) => {
+        if (err) throw err
+        if (isMatch) {
+          console.log(user)
+          return done(null, user, { message: 'login successful' })
+        } else {
+          return done(null, false, { message: 'Wrong Password' })
         }
-    })
+      })
+    } catch (err) {
+      done(err)
+    }
+  })
 )
-
-
