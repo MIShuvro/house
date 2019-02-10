@@ -43,7 +43,11 @@ const userSchema = new Schema({
     type: String,
     required: `Location is required`
   },
-  bookmarks: [String]
+  bookmarks: [String],
+  posts: {
+    type: Schema.Types.ObjectId,
+    ref: 'Post'
+  }
 })
 userSchema.plugin(beautifyUnique)
 
