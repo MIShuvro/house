@@ -13,7 +13,8 @@ module.exports.register = async (req, res) => {
     profilePicture,
     gender,
     contact,
-    location
+    location,
+    accountType
   } = req.body
   errors = {}
   if (!password) {
@@ -36,6 +37,7 @@ module.exports.register = async (req, res) => {
     gender,
     contact,
     location,
+    accountType,
     password: bcrypt.hashSync(password, 10)
   })
 
@@ -64,7 +66,7 @@ module.exports.login = (req, res, next) => {
       if (err) {
         return next(err)
       }
-      info !== undefined ? res.json({ message: info.message }) : null
+      info !== undefined ? res.json({ message: info.message, user }) : null
     })
   })(req, res, next)
 }

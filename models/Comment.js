@@ -11,10 +11,10 @@ const CommentSchema = new Schema({
     trim: true,
     required: `Comment is required`
   },
-  Post: {
+  post: {
     type: Schema.Types.ObjectId,
     ref: 'Post',
-    required: `Post Id is required`
+    required: `Post slug is required`
   },
   author: {
     type: Schema.Types.ObjectId,

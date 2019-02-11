@@ -28,6 +28,7 @@ mongoose
  */
 app.use('/api/auth', require('./routes/auth'))
 app.use('/api/posts', require('./routes/posts'))
+app.use('/api/comments', require('./routes/comments'))
 app.use((req, res, next) => {
   res.status(403).json({
     message: 'Invalid api request'
