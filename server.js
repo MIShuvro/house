@@ -1,49 +1,33 @@
 const express = require('express'),
-  mongoose = require('mongoose'),
-  passport = require('passport'),
-  session = require('express-session'),
-  cookieParser = require('cookie-parser'),
-  app = express()
-/*
- * ## Body parser & others
- */
-require('./config/passport')
-app.use(cookieParser())
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
-app.use(require('morgan')('dev'))
+mongoose = require('mongoose'),
+passport = require('passport'),
+app = express()
+
+
 require('dotenv').config()
-app.use(require('connect-flash')())
 app.use(passport.initialize())
-app.use(passport.session())
-app.use(session({ secret: 'Ilovescotch', resave: true, saveUninitialized: true }))
-app.use(function(req, res, next) {
-  res.locals.message = req.flash('message')
-  next()
-})
+app
+
+/*
+* ## Body parser
+*/
+app.use(express.urlencoded({extended: true}))
+app.use(express.json())
 
 // Mongodb Connection
-mongoose
-  .connect(process.env.DBPATH, { useNewUrlParser: true, useCreateIndex: true })
-  .then(() => console.log('MongoDB is connected'))
+mongoose.connect(process.env.DBPATH, {useNewUrlParser: true, useCreateIndex: true}).then(() => console.log('MongoDB is connected'))
 
 /*
- * ## Api Routes
- */
+* ## Api Routes
+*/
 app.use('/api/auth', require('./routes/auth'))
-app.use('/api/posts', require('./routes/posts'))
-app.use((req, res, next) => {
-  res.status(403).json({
-    message: 'Invalid api request'
-  })
-  next()
-})
 
 /*
- * PORT
- */
-const PORT = process.env.PORT || 3333
+* PORT
+*/
+const PORT=process.env.PORT || 3333
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port is ${PORT}`)
+app.listen(PORT,()=>{
+    console.log(`Server is running on port is ${PORT}`);
+    
 })

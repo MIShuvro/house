@@ -3,7 +3,7 @@ Special symbol
 ! = unique              $ = edit
 !* = not required       ^ = delete
 
-✔ User: --->
+User: --->
 
 * name
 * email
@@ -14,16 +14,17 @@ Special symbol
 * gender
 * location
 !* contact number
-[bookmarks]
 
 Rental post :[post]
 
-//TODO: keys
-
+//todo keys
+* bookmark []
 * review
-* comments  []
+* comment  []
 * like [] && count like
 * dislike [] && count dislike
+
+Rental House post :[post] ^--> user || admin can do anything
 * title $--> user || admin can do anything
 * gallery [atleast one photo] $ ^--> user || admin can do anything
 * price/month $--> user || admin can do anything
