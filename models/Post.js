@@ -10,7 +10,8 @@ const Post = new Schema({
   slug: {
     type: String,
     trim: true,
-    required: 'Slug is required'
+    required: 'Slug is required',
+    unique: `{VALUE} is already taken`
   },
   description: {
     type: String,
@@ -24,27 +25,22 @@ const Post = new Schema({
   },
   gallery: {
     type: [String],
-    required: true
+    validate: {
+      validator: v => v == null || v.length > 0,
+      message: `You have to upload at least 1 picture`
+    }
   },
   location: {
     type: String,
     required: `Location is required`,
     trim: true
+  },
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
   }
 })
-Post.plugin(beautifyUnique)
-Post.pre('save', async function(next) {
-  if (!this.isModified('name')) {
-    next() // skip it
-    return // stop this function from running
-  }
-  this.slug = slug(this.name)
 
-  const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`, 'i')
-  const postWithSlugs = await this.constructor.find({ slug: slugRegEx })
-  if (postWithSlugs.length) {
-    this.slug = `${this.slug}-${postWithSlugs.length + 1}`
-  }
-  next()
-})
+Post.plugin(beautifyUnique)
+
 module.exports = model('Post', Post)

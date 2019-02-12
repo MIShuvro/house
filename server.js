@@ -7,20 +7,16 @@ const express = require('express'),
 /*
  * ## Body parser & others
  */
-require('./config/passport')
+require('./config/passport')(passport)
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(require('morgan')('dev'))
 require('dotenv').config()
 app.use(require('connect-flash')())
+app.use(session({ secret: 'Ilovescotch', resave: true, saveUninitialized: true }))
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(session({ secret: 'Ilovescotch', resave: true, saveUninitialized: true }))
-app.use(function(req, res, next) {
-  res.locals.message = req.flash('message')
-  next()
-})
 
 // Mongodb Connection
 mongoose
@@ -32,6 +28,7 @@ mongoose
  */
 app.use('/api/auth', require('./routes/auth'))
 app.use('/api/posts', require('./routes/posts'))
+app.use('/api/comments', require('./routes/comments'))
 app.use((req, res, next) => {
   res.status(403).json({
     message: 'Invalid api request'

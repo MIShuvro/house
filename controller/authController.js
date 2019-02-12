@@ -13,7 +13,8 @@ module.exports.register = async (req, res) => {
     profilePicture,
     gender,
     contact,
-    location
+    location,
+    accountType
   } = req.body
   errors = {}
   if (!password) {
@@ -36,6 +37,7 @@ module.exports.register = async (req, res) => {
     gender,
     contact,
     location,
+    accountType,
     password: bcrypt.hashSync(password, 10)
   })
 
@@ -50,15 +52,28 @@ module.exports.register = async (req, res) => {
   }
 }
 
-// Login
+// login
 
 module.exports.login = (req, res, next) => {
-  passport.authenticate('local-login', { failureFlash: true }, (err, user, info) => {
+  passport.authenticate('local-login', (err, user, info) => {
     if (err) {
-      res.json({ errors: err })
+      console.log(err)
     }
-    if (info !== undefined) {
-      res.json({ info: info.message })
+    if (!user) {
+      info !== undefined ? res.json({ message: info.message }) : null
     }
+    req.logIn(user, err => {
+      if (err) {
+        return next(err)
+      }
+      info !== undefined ? res.json({ message: info.message, user }) : null
+    })
   })(req, res, next)
+}
+
+// Logout
+
+module.exports.logout = (req, res) => {
+  req.logout()
+  res.json({ message: 'Successfully logged out' })
 }
